@@ -3,6 +3,7 @@
 
 @section('content')
 <div class="page-header">
+            <button type="button" class="btn btn-secondary btn-sm export-pdf" onclick="window.print()">تصدير PDF</button>
     <div><h1 class="page-title">مصروفات التوزيع</h1><p class="page-sub">{{ $expenses->total() }} مصروف</p></div>
     @can('expenses.create')<div class="page-actions"><a class="btn btn-primary" href="{{ route('expenses.create') }}">مصروف جديد</a></div>@endcan
 </div>

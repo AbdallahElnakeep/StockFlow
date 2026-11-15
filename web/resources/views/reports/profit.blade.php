@@ -2,7 +2,7 @@
 @section('title', 'تقرير الأرباح')
 
 @section('content')
-<div class="page-header"><h1 class="page-title">الأرباح والخسائر</h1></div>
+<div class="page-header"><button type="button" class="btn btn-secondary btn-sm export-pdf" onclick="window.print()">تصدير PDF</button><h1 class="page-title">الأرباح والخسائر</h1></div>
 
 <form class="filter-bar" method="GET">
     <input class="input" name="from" type="date" value="{{ $from }}">

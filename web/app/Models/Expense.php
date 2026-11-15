@@ -17,4 +17,9 @@ class Expense extends Model
     {
         return ['amount' => 'decimal:2', 'issued_at' => 'datetime'];
     }
+
+    public function rep()
+    {
+        return $this->belongsTo(User::class, 'rep_user_id');
+    }
 }

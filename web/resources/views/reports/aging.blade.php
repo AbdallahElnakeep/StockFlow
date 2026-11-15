@@ -2,7 +2,7 @@
 @section('title', 'أعمار الديون')
 
 @section('content')
-<div class="page-header"><h1 class="page-title">مديونيات العملاء</h1></div>
+<div class="page-header"><button type="button" class="btn btn-secondary btn-sm export-pdf" onclick="window.print()">تصدير PDF</button><h1 class="page-title">مديونيات العملاء</h1></div>
 
 <div class="card">
     @if($rows->isEmpty())
@@ -18,7 +18,7 @@
                     <td class="num" style="color:var(--error); font-weight:600">{{ number_format($customer->balance, 2) }}</td>
                     <td class="num">{{ $oldest ? \Carbon\Carbon::parse($oldest)->format('Y-m-d') : '—' }}</td>
                     @if($oldest)
-                        @php($days = $oldest->diffInDays(now()))
+                        @php($days = \Carbon\Carbon::parse($oldest)->diffInDays(now()))
                         <td>@if($days > 60)<span class="badge badge-error">{{ $days }} يوم</span>@elseif($days > 30)<span class="badge badge-warning">{{ $days }} يوم</span>@else<span class="badge badge-info">{{ $days }} يوم</span>@endif</td>
                     @else
                         <td>—</td>

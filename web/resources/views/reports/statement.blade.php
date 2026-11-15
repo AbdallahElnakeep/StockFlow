@@ -3,6 +3,7 @@
 
 @section('content')
 <div class="page-header">
+            <button type="button" class="btn btn-secondary btn-sm export-pdf" onclick="window.print()">تصدير PDF</button>
     <div>
         <h1 class="page-title">كشف حساب: {{ $customer->name }}</h1>
         <p class="page-sub">الرصيد الحالي: {{ number_format($customer->balance, 2) }}</p>

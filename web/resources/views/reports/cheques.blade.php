@@ -2,7 +2,7 @@
 @section('title', 'الشيكات')
 
 @section('content')
-<div class="page-header"><h1 class="page-title">الشيكات</h1></div>
+<div class="page-header"><button type="button" class="btn btn-secondary btn-sm export-pdf" onclick="window.print()">تصدير PDF</button><h1 class="page-title">الشيكات</h1></div>
 
 <div class="card">
     @if($cheques->isEmpty())

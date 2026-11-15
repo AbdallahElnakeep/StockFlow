@@ -12,4 +12,9 @@ class StockTransferItem extends Model
     {
         return ['qty' => 'decimal:3'];
     }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

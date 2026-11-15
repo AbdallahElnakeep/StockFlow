@@ -112,6 +112,10 @@
             </div>
         </header>
         <main class="app-content">
+            <div class="print-header">
+                <span class="ph-company">{{ auth()->user()->company?->name }}</span>
+                <span class="ph-date">@yield('title', 'StockFlow') — {{ now()->format('Y-m-d H:i') }}</span>
+            </div>
             @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif

@@ -2,7 +2,7 @@
 @section('title', 'تقرير المخزون')
 
 @section('content')
-<div class="page-header"><h1 class="page-title">قيمة المخزون ونقص الأصناف</h1></div>
+<div class="page-header"><button type="button" class="btn btn-secondary btn-sm export-pdf" onclick="window.print()">تصدير PDF</button><h1 class="page-title">قيمة المخزون ونقص الأصناف</h1></div>
 
 @if($lowStock->isNotEmpty())
     <div class="card" style="margin-bottom:14px">

@@ -389,3 +389,42 @@ body { font-size: 13.5px; -webkit-font-smoothing: antialiased; }
 }
 .nav-link.active .ico { opacity: 1; }
 .nav-link { align-items: center; }
+
+.print-header { display: none; }
+
+.export-pdf::before { content: "⬇"; font-size: 12px; }
+
+@media print {
+  @page { size: A4; margin: 12mm; }
+
+  .app-sidebar, .app-topbar, .page-actions, .no-print, .filters,
+  .pagination, .alert, #menu-btn, .export-pdf, .empty-actions, .filter-bar { display: none !important; }
+
+  html, body { background: #fff !important; color: #111 !important; font-size: 12px; }
+  * { color: #111 !important; box-shadow: none !important; text-shadow: none !important; }
+
+  [data-theme="dark"], [data-theme="dark"] .app-sidebar, [data-theme="dark"] .table th {
+    background: #fff !important;
+  }
+
+  .app-shell, .app-main { display: block !important; }
+  .app-content { padding: 0 !important; max-width: none !important; }
+
+  .card { border: 1px solid #ccc !important; break-inside: auto; }
+  tr { break-inside: avoid; }
+
+  .table { width: 100%; font-size: 11px; }
+  .table th { background: #eee !important; }
+  .badge { border: 1px solid currentColor; }
+
+  .print-header {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #111;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+  }
+  .print-header .ph-company { font-size: 16px; font-weight: 700; }
+  .print-header .ph-date { font-size: 11px; }
+}

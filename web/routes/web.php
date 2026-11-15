@@ -48,9 +48,9 @@ Route::middleware(['auth', 'active.user'])->group(function () {
 
     Route::middleware('can:warehouses.view')->group(function () {
         Route::get('/warehouses', [App\Http\Controllers\WarehouseController::class, 'index'])->name('warehouses.index');
-        Route::get('/warehouses/{warehouse}', [App\Http\Controllers\WarehouseController::class, 'show'])->name('warehouses.show');
         Route::get('/warehouses/create', [App\Http\Controllers\WarehouseController::class, 'create'])->name('warehouses.create')->middleware('can:warehouses.create');
         Route::post('/warehouses', [App\Http\Controllers\WarehouseController::class, 'store'])->name('warehouses.store')->middleware('can:warehouses.create');
+        Route::get('/warehouses/{warehouse}', [App\Http\Controllers\WarehouseController::class, 'show'])->name('warehouses.show');
         Route::get('/warehouses/{warehouse}/edit', [App\Http\Controllers\WarehouseController::class, 'edit'])->name('warehouses.edit')->middleware('can:warehouses.update');
         Route::put('/warehouses/{warehouse}', [App\Http\Controllers\WarehouseController::class, 'update'])->name('warehouses.update')->middleware('can:warehouses.update');
         Route::delete('/warehouses/{warehouse}', [App\Http\Controllers\WarehouseController::class, 'destroy'])->name('warehouses.destroy')->middleware('can:warehouses.delete');
@@ -171,3 +171,5 @@ Route::middleware(['auth', 'active.user'])->group(function () {
         Route::put('/settings', [App\Http\Controllers\SettingsController::class, 'update'])->name('settings.update');
     });
 });
+
+

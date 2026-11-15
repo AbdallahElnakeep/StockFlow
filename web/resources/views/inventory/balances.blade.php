@@ -3,6 +3,7 @@
 
 @section('content')
 <div class="page-header">
+            <button type="button" class="btn btn-secondary btn-sm export-pdf" onclick="window.print()">تصدير PDF</button>
     <div><h1 class="page-title">أرصدة المخزون</h1><p class="page-sub">{{ $balances->total() }} رصيد</p></div>
 </div>
 

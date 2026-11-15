@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Customer;
+use App\Models\Supplier;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -19,6 +22,11 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Relation::morphMap([
+            'customer' => Customer::class,
+            'supplier' => Supplier::class,
+        ]);
+
         Paginator::defaultView('pagination');
 
         Gate::before(function (User $user) {

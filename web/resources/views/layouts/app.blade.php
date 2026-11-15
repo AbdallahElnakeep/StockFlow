@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,75 +19,76 @@
         <div class="app-brand"><span class="logo">S</span> StockFlow</div>
         @php
             $can = fn ($key) => auth()->user()->hasPermission($key);
+            $icon = fn ($type) => view('layouts.partials.icon', ['type' => $type])->render();
         @endphp
         <div class="nav-section">الرئيسية</div>
-        <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">لوحة المتابعة</a>
+        <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">{!! $icon('dashboard') !!} لوحة المتابعة</a>
 
         @if($can('sales.view') || $can('returns.view') || $can('payments.view'))
             <div class="nav-section">المبيعات</div>
             @can('sales.view')
-                <a class="nav-link {{ request()->routeIs('invoices.*') ? 'active' : '' }}" href="{{ route('invoices.index') }}">فواتير البيع</a>
+                <a class="nav-link {{ request()->routeIs('invoices.*') ? 'active' : '' }}" href="{{ route('invoices.index') }}">{!! $icon('invoice') !!} فواتير البيع</a>
             @endcan
             @can('returns.view')
-                <a class="nav-link {{ request()->routeIs('returns.*') ? 'active' : '' }}" href="{{ route('returns.index') }}">المرتجعات</a>
+                <a class="nav-link {{ request()->routeIs('returns.*') ? 'active' : '' }}" href="{{ route('returns.index') }}">{!! $icon('return') !!} المرتجعات</a>
             @endcan
             @can('payments.view')
-                <a class="nav-link {{ request()->routeIs('payments.*') ? 'active' : '' }}" href="{{ route('payments.index') }}">التحصيلات</a>
+                <a class="nav-link {{ request()->routeIs('payments.*') ? 'active' : '' }}" href="{{ route('payments.index') }}">{!! $icon('wallet') !!} التحصيلات</a>
             @endcan
             @can('customers.view')
-                <a class="nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}" href="{{ route('customers.index') }}">العملاء</a>
+                <a class="nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}" href="{{ route('customers.index') }}">{!! $icon('users') !!} العملاء</a>
             @endcan
         @endif
 
         @if($can('purchases.view') || $can('inventory'))
             <div class="nav-section">المخزون</div>
             @can('purchases.view')
-                <a class="nav-link {{ request()->routeIs('purchases.*') ? 'active' : '' }}" href="{{ route('purchases.index') }}">المشتريات</a>
-                <a class="nav-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">الموردون</a>
+                <a class="nav-link {{ request()->routeIs('purchases.*') ? 'active' : '' }}" href="{{ route('purchases.index') }}">{!! $icon('cart') !!} المشتريات</a>
+                <a class="nav-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">{!! $icon('truck') !!} الموردون</a>
             @endcan
             @can('inventory.view')
-                <a class="nav-link {{ request()->routeIs('inventory.*') ? 'active' : '' }}" href="{{ route('inventory.balances') }}">أرصدة المخزون</a>
-                <a class="nav-link {{ request()->routeIs('inventory.movements') ? 'active' : '' }}" href="{{ route('inventory.movements') }}">حركات المخزون</a>
-                <a class="nav-link {{ request()->routeIs('transfers.*') ? 'active' : '' }}" href="{{ route('transfers.index') }}">التحويلات</a>
-                <a class="nav-link {{ request()->routeIs('counts.*') ? 'active' : '' }}" href="{{ route('counts.index') }}">الجرد</a>
+                <a class="nav-link {{ request()->routeIs('inventory.balances') ? 'active' : '' }}" href="{{ route('inventory.balances') }}">{!! $icon('layers') !!} أرصدة المخزون</a>
+                <a class="nav-link {{ request()->routeIs('inventory.movements') ? 'active' : '' }}" href="{{ route('inventory.movements') }}">{!! $icon('activity') !!} حركات المخزون</a>
+                <a class="nav-link {{ request()->routeIs('transfers.*') ? 'active' : '' }}" href="{{ route('transfers.index') }}">{!! $icon('transfer') !!} التحويلات</a>
+                <a class="nav-link {{ request()->routeIs('counts.*') ? 'active' : '' }}" href="{{ route('counts.index') }}">{!! $icon('count') !!} الجرد</a>
             @endcan
             @can('products.view')
-                <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">الأصناف</a>
+                <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">{!! $icon('tag') !!} الأصناف</a>
             @endcan
         @endif
 
         @if($can('reps.view'))
             <div class="nav-section">التوزيع</div>
-            <a class="nav-link {{ request()->routeIs('reps.*') ? 'active' : '' }}" href="{{ route('reps.index') }}">المندوبون</a>
-            <a class="nav-link {{ request()->routeIs('loadings.*') ? 'active' : '' }}" href="{{ route('loadings.index') }}">تحميل العهد</a>
-            <a class="nav-link {{ request()->routeIs('settlements.*') ? 'active' : '' }}" href="{{ route('settlements.index') }}">التسويات</a>
+            <a class="nav-link {{ request()->routeIs('reps.*') ? 'active' : '' }}" href="{{ route('reps.index') }}">{!! $icon('user') !!} المندوبون</a>
+            <a class="nav-link {{ request()->routeIs('loadings.*') ? 'active' : '' }}" href="{{ route('loadings.index') }}">{!! $icon('truck') !!} تحميل العهد</a>
+            <a class="nav-link {{ request()->routeIs('settlements.*') ? 'active' : '' }}" href="{{ route('settlements.index') }}">{!! $icon('flag') !!} التسويات</a>
             @can('expenses.view')
-                <a class="nav-link {{ request()->routeIs('expenses.*') ? 'active' : '' }}" href="{{ route('expenses.index') }}">المصروفات</a>
+                <a class="nav-link {{ request()->routeIs('expenses.*') ? 'active' : '' }}" href="{{ route('expenses.index') }}">{!! $icon('dollar') !!} المصروفات</a>
             @endcan
         @endif
 
         @can('reports.view')
             <div class="nav-section">التقارير</div>
-            <a class="nav-link {{ request()->routeIs('reports.sales') ? 'active' : '' }}" href="{{ route('reports.sales') }}">المبيعات والأرباح</a>
-            <a class="nav-link {{ request()->routeIs('reports.products') ? 'active' : '' }}" href="{{ route('reports.products') }}">الأصناف</a>
-            <a class="nav-link {{ request()->routeIs('reports.reps') ? 'active' : '' }}" href="{{ route('reports.reps') }}">المندوبون</a>
-            <a class="nav-link {{ request()->routeIs('reports.aging') ? 'active' : '' }}" href="{{ route('reports.aging') }}">أعمار الديون</a>
-            <a class="nav-link {{ request()->routeIs('reports.cheques') ? 'active' : '' }}" href="{{ route('reports.cheques') }}">الشيكات</a>
+            <a class="nav-link {{ request()->routeIs('reports.sales') ? 'active' : '' }}" href="{{ route('reports.sales') }}">{!! $icon('trending') !!} المبيعات والأرباح</a>
+            <a class="nav-link {{ request()->routeIs('reports.products') ? 'active' : '' }}" href="{{ route('reports.products') }}">{!! $icon('chart') !!} الأصناف</a>
+            <a class="nav-link {{ request()->routeIs('reports.reps') ? 'active' : '' }}" href="{{ route('reports.reps') }}">{!! $icon('user') !!} المندوبون</a>
+            <a class="nav-link {{ request()->routeIs('reports.aging') ? 'active' : '' }}" href="{{ route('reports.aging') }}">{!! $icon('clock') !!} أعمار الديون</a>
+            <a class="nav-link {{ request()->routeIs('reports.cheques') ? 'active' : '' }}" href="{{ route('reports.cheques') }}">{!! $icon('cheque') !!} الشيكات</a>
         @endcan
 
         @if($can('users.view') || $can('roles.view'))
             <div class="nav-section">الإدارة</div>
             @can('users.view')
-                <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">المستخدمون</a>
+                <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">{!! $icon('users') !!} المستخدمون</a>
             @endcan
             @can('roles.view')
-                <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}" href="{{ route('roles.index') }}">الأدوار</a>
+                <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}" href="{{ route('roles.index') }}">{!! $icon('shield') !!} الأدوار</a>
             @endcan
             @can('warehouses.view')
-                <a class="nav-link {{ request()->routeIs('warehouses.*') ? 'active' : '' }}" href="{{ route('warehouses.index') }}">المخازن والعُهد</a>
+                <a class="nav-link {{ request()->routeIs('warehouses.*') ? 'active' : '' }}" href="{{ route('warehouses.index') }}">{!! $icon('warehouse') !!} المخازن والعُهد</a>
             @endcan
             @can('settings.view')
-                <a class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}" href="{{ route('settings.index') }}">الإعدادات</a>
+                <a class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}" href="{{ route('settings.index') }}">{!! $icon('settings') !!} الإعدادات</a>
             @endcan
         @endif
     </aside>

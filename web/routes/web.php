@@ -8,6 +8,10 @@ Route::redirect('/', '/login');
 
 
 
+
+
+
+
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', App\Http\Controllers\Auth\LoginController::class)->name('login');
     Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'store']);

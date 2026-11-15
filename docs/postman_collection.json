@@ -1,0 +1,77 @@
+{
+  "info": {
+    "name": "StockFlow Rep API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"01000000002\",\n  \"password\": \"rep123\",\n  \"device_name\": \"postman\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/api/auth/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bootstrap",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{base_url}}/api/bootstrap"
+      }
+    },
+    {
+      "name": "Sync",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{base_url}}/api/sync",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"batch_uuid\": \"11111111-1111-4111-8111-111111111111\",\n  \"device_id\": \"postman\",\n  \"operations\": [\n    {\n      \"op_uuid\": \"22222222-2222-4222-8222-222222222222\",\n      \"type\": \"invoice\",\n      \"data\": {\n        \"customer_id\": 1,\n        \"type\": \"cash\",\n        \"items\": [{ \"product_id\": 1, \"qty\": 2, \"unit_price\": 15 }]\n      }\n    }\n  ]\n}"
+        }
+      }
+    },
+    {
+      "name": "My Summary",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{base_url}}/api/my/summary"
+      }
+    }
+  ]
+}

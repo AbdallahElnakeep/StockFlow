@@ -31,7 +31,7 @@ class SettingsController extends Controller
 
         $company->update([
             'name' => $data['company_name'],
-            'phone' => $data['company_phone'],
+            'phone' => $data['company_phone'] ?? null,
         ]);
 
         foreach (['enforce_credit_limit' => (bool) ($data['enforce_credit_limit'] ?? false), 'allow_negative_stock' => (bool) ($data['allow_negative_stock'] ?? false)] as $key => $value) {

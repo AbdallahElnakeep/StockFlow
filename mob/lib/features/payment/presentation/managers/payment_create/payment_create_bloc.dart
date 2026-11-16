@@ -20,7 +20,7 @@ class PaymentCreateBloc extends Bloc<PaymentCreateEvent, PaymentCreateState> {
 
     emit(PaymentSubmitting());
 
-    await _syncRepo.enqueue('payment', {
+    final opUuid = await _syncRepo.enqueue('payment', {
       'customer_id': event.customerId,
       'amount': event.amount,
       'note': event.note,
@@ -31,7 +31,17 @@ class PaymentCreateBloc extends Bloc<PaymentCreateEvent, PaymentCreateState> {
 
     flush.fold(
       (failure) => emit(PaymentQueued(false)),
-      (results) => emit(PaymentQueued(true)),
+      (results) {
+        final own = results.where((r) => r.opUuid == opUuid).toList();
+        if (own.isNotEmpty && own.first.state == 'rejected') {
+          final reason = own.first.reason;
+          emit(PaymentInvalid(reason is String && reason.isNotEmpty
+              ? 'رُفضت من السيرفر: $reason'
+              : 'رُفضت من السيرفر — راجع البيانات وأعد المحاولة'));
+          return;
+        }
+        emit(PaymentQueued(true));
+      },
     );
 
     _bootstrapBloc.add(const LoadBootstrap());

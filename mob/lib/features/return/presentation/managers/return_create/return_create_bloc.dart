@@ -20,7 +20,12 @@ class ReturnCreateBloc extends Bloc<ReturnCreateEvent, ReturnCreateState> {
 
     emit(ReturnSubmitting());
 
-    await _syncRepo.enqueue('return', {
+    if (event.items.any((i) => (i['qty'] as num? ?? 0) <= 0)) {
+      emit(ReturnInvalid('كل الكميات يجب أن تكون أكبر من صفر'));
+      return;
+    }
+
+    final opUuid = await _syncRepo.enqueue('return', {
       'customer_id': event.customerId,
       'restock': event.restock,
       'issued_at': DateTime.now().toIso8601String(),
@@ -31,7 +36,17 @@ class ReturnCreateBloc extends Bloc<ReturnCreateEvent, ReturnCreateState> {
 
     flush.fold(
       (failure) => emit(ReturnQueued(false)),
-      (results) => emit(ReturnQueued(true)),
+      (results) {
+        final own = results.where((r) => r.opUuid == opUuid).toList();
+        if (own.isNotEmpty && own.first.state == 'rejected') {
+          final reason = own.first.reason;
+          emit(ReturnInvalid(reason is String && reason.isNotEmpty
+              ? 'رُفضت من السيرفر: $reason'
+              : 'رُفضت من السيرفر — راجع البيانات وأعد المحاولة'));
+          return;
+        }
+        emit(ReturnQueued(true));
+      },
     );
 
     _bootstrapBloc.add(const LoadBootstrap());

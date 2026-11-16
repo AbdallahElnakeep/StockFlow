@@ -105,6 +105,12 @@ class _InvoiceCreateScreenState extends State<InvoiceCreateScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.sent ? 'saved_synced'.tr() : 'saved_offline'.tr())));
                             context.pop(true);
                           }
+                          if (state is InvoiceCreateError) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(state.message),
+                              backgroundColor: AppColors.error,
+                            ));
+                          }
                         },
                         builder: (context, state) {
                           return ElevatedButton(

@@ -1,7 +1,7 @@
 <?php
 
-require __DIR__.'/../vendor/autoload.php';
-$app = require __DIR__.'/../bootstrap/app.php';
+require __DIR__.'/../../vendor/autoload.php';
+$app = require __DIR__.'/../../bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
 use Illuminate\Support\Facades\Artisan;
@@ -39,14 +39,15 @@ function webRequest($kernel, string $method, string $uri, ?App\Models\User $user
             auth('web')->setUser($user);
             app()->instance('current.company.id', $user->company_id);
         }
+        config(['session.driver' => 'array']);
+        $session = app('session')->driver('array');
         $r = Illuminate\Http\Request::create($uri, $method, $form, [], [], ['HTTP_ACCEPT' => 'text/html', 'REQUEST_METHOD' => $method]);
-        $r->setLaravelSession(app('session')->driver('array'));
+        $r->setLaravelSession($session);
         $r->session()->regenerateToken();
         if ($method !== 'GET' && $form !== []) {
             $form['_token'] = $r->session()->token();
-            $r = Illuminate\Http\Request::create($uri, $method, $form, [], [], ['HTTP_ACCEPT' => 'text/html']);
-            $r->setLaravelSession(app('session')->driver('array'));
-            $r->session()->put('_token', $form['_token']);
+            $r = Illuminate\Http\Request::create($uri, $method, $form, [], [], ['HTTP_ACCEPT' => 'text/html', 'REQUEST_METHOD' => $method]);
+            $r->setLaravelSession($session);
         }
         $response = $kernel->handle($r);
         return $response->getStatusCode();
@@ -168,8 +169,13 @@ $evilRep = App\Models\User::create(['company_id' => $evilCompany->id, 'name' => 
 $evilRole = App\Models\Role::create(['company_id' => $evilCompany->id, 'name' => 'مندوب']);
 $evilRole->permissions()->sync(App\Models\Permission::whereIn('module', ['customers', 'sales'])->where('action', 'view')->pluck('id'));
 $evilRep->roles()->attach($evilRole);
+app()->forgetInstance('current.company.id');
+auth()->forgetGuards();
+app()->instance('current.company.id', $evilCompany->id);
 app(\App\Services\RepCustodyService::class)->ensureCustody($evilRep);
 $tokenE = $evilRep->refresh()->createToken('e')->plainTextToken;
+auth()->forgetGuards();
+app()->forgetInstance('current.company.id');
 $r = Illuminate\Http\Request::create('/api/bootstrap', 'GET', [], [], [], ['HTTP_ACCEPT' => 'application/json', 'HTTP_AUTHORIZATION' => "Bearer $tokenE"]);
 $resp = $kernel->handle($r);
 $body = json_decode($resp->getContent(), true);

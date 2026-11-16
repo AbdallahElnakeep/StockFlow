@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../core/di/injection.dart';
+import '../../../../../../core/theme/app_theme.dart';
 import '../../../../bootstrap/presentation/managers/bootstrap_bloc.dart';
 import '../../managers/return_create/return_create_bloc.dart';
 import '../../managers/return_create/return_create_event.dart';
@@ -85,6 +86,12 @@ class _ReturnCreateScreenState extends State<ReturnCreateScreen> {
                   if (state is ReturnQueued) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.sent ? 'saved_synced'.tr() : 'saved_offline'.tr())));
                     context.pop(true);
+                  }
+                  if (state is ReturnInvalid) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: AppColors.error,
+                    ));
                   }
                 },
                 builder: (context, state) {

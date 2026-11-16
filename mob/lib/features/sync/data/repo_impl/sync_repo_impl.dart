@@ -14,8 +14,10 @@ class SyncRepoImpl implements SyncRepo {
   SyncRepoImpl(this._api, this._db);
 
   @override
-  Future<void> enqueue(String type, Map<String, dynamic> payload) async {
-    await _db.enqueueOp(_uuid.v4(), type, payload);
+  Future<String> enqueue(String type, Map<String, dynamic> payload) async {
+    final opUuid = _uuid.v4();
+    await _db.enqueueOp(opUuid, type, payload);
+    return opUuid;
   }
 
   @override
@@ -53,9 +55,7 @@ class SyncRepoImpl implements SyncRepo {
           .toList();
 
       for (final result in results) {
-        if (result.state == 'accepted' || result.state == 'duplicate') {
-          await _db.removeOp(result.opUuid);
-        }
+        await _db.removeOp(result.opUuid);
       }
 
       return Right(results);

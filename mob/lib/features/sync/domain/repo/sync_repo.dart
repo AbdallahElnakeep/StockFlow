@@ -1,7 +1,7 @@
 import '../../../../core/error/failures.dart';
 
 abstract class SyncRepo {
-  Future<void> enqueue(String type, Map<String, dynamic> payload);
+  Future<String> enqueue(String type, Map<String, dynamic> payload);
   Future<int> pendingCount();
   Future<ApiResult<List<SyncOpResult>>> flush();
 }

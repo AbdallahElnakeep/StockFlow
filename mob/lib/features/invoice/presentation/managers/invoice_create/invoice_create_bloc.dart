@@ -17,10 +17,14 @@ class InvoiceCreateBloc extends Bloc<InvoiceCreateEvent, InvoiceCreateState> {
       emit(InvoiceCreateError('اختر صنفًا واحدًا على الأقل'));
       return;
     }
+    if (event.items.any((i) => (i['qty'] as num? ?? 0) <= 0)) {
+      emit(InvoiceCreateError('كل الكميات يجب أن تكون أكبر من صفر'));
+      return;
+    }
 
     emit(InvoiceSubmitting());
 
-    await _syncRepo.enqueue('invoice', {
+    final opUuid = await _syncRepo.enqueue('invoice', {
       'customer_id': event.customerId,
       'type': event.type,
       'issued_at': DateTime.now().toIso8601String(),
@@ -31,7 +35,17 @@ class InvoiceCreateBloc extends Bloc<InvoiceCreateEvent, InvoiceCreateState> {
 
     flush.fold(
       (failure) => emit(InvoiceQueued(false)),
-      (results) => emit(InvoiceQueued(true)),
+      (results) {
+        final own = results.where((r) => r.opUuid == opUuid).toList();
+        if (own.isNotEmpty && own.first.state == 'rejected') {
+          final reason = own.first.reason;
+          emit(InvoiceCreateError(reason is String && reason.isNotEmpty
+              ? 'رُفضت من السيرفر: $reason'
+              : 'رُفضت من السيرفر — راجع البيانات وأعد المحاولة'));
+          return;
+        }
+        emit(InvoiceQueued(true));
+      },
     );
 
     _bootstrapBloc.add(const b.LoadBootstrap());

@@ -93,6 +93,11 @@ Route::middleware(['auth', 'active.user'])->group(function () {
         Route::get('/purchases/create', [App\Http\Controllers\PurchaseController::class, 'create'])->name('purchases.create')->middleware('can:purchases.create');
         Route::post('/purchases', [App\Http\Controllers\PurchaseController::class, 'store'])->name('purchases.store')->middleware('can:purchases.create');
         Route::get('/purchases/{purchase}', [App\Http\Controllers\PurchaseController::class, 'show'])->name('purchases.show');
+
+        Route::get('/purchase-returns', [App\Http\Controllers\PurchaseReturnController::class, 'index'])->name('purchase-returns.index');
+        Route::get('/purchase-returns/create', [App\Http\Controllers\PurchaseReturnController::class, 'create'])->name('purchase-returns.create')->middleware('can:purchases.create');
+        Route::post('/purchase-returns', [App\Http\Controllers\PurchaseReturnController::class, 'store'])->name('purchase-returns.store')->middleware('can:purchases.create');
+        Route::get('/purchase-returns/{purchaseReturn}', [App\Http\Controllers\PurchaseReturnController::class, 'show'])->name('purchase-returns.show');
     });
 
     Route::middleware('can:inventory.view')->group(function () {

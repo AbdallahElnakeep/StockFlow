@@ -23,7 +23,7 @@
                 <tr>
                     <td>{{ $supplier->name }}</td>
                     <td class="num">{{ $supplier->phone ?? '—' }}</td>
-                    <td class="num" @if($supplier->balance > 0) style="color:var(--error); font-weight:600" @endif>{{ number_format($supplier->balance, 2) }}</td>
+                    <td class="num" @if($supplier->balance > 0) style="color:var(--error); font-weight:600" @endif>@if($supplier->balance < 0)<span class="badge badge-info" title="رصيد دائن — المورد مدين لنا">دفعات مقدمة</span> @endif{{ number_format($supplier->balance, 2) }}</td>
                     <td>@if($supplier->is_active)<span class="badge badge-success">نشط</span>@else<span class="badge badge-error">موقوف</span>@endif</td>
                     <td>
                         @can('purchases.update')<a class="btn btn-secondary btn-sm" href="{{ route('suppliers.edit', $supplier) }}">تعديل</a>@endcan

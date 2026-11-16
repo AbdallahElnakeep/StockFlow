@@ -44,6 +44,7 @@
             <div class="nav-section">المخزون</div>
             @can('purchases.view')
                 <a class="nav-link {{ request()->routeIs('purchases.*') ? 'active' : '' }}" href="{{ route('purchases.index') }}">{!! $icon('cart') !!} المشتريات</a>
+                <a class="nav-link {{ request()->routeIs('purchase-returns.*') ? 'active' : '' }}" href="{{ route('purchase-returns.index') }}">{!! $icon('return') !!} مرتجعات المشتريات</a>
                 <a class="nav-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">{!! $icon('truck') !!} الموردون</a>
             @endcan
             @can('inventory.view')
